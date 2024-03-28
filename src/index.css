@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@font-face {
+  font-family: "Garet-Book";
+  src: local("Garet-Book"), url("./fonts/Garet-Book.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Garet-Heavy";
+  src: local("Garet-Heavy"), url("./fonts/Garet-Heavy.ttf") format("truetype");
+}
