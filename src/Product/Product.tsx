@@ -9,70 +9,99 @@ import {
 } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
 import { useParams } from "react-router-dom";
+import { collection, doc, getDoc } from "firebase/firestore";
+
+
+import { firestore } from "../config/firebase";
+import { useEffect, useState } from "react";
+import { formatPrice } from "../utils/utils";
 
 const Product = () => {
   const { id } = useParams();
+  const [product, setProduct] = useState({
+    id: '',
+    name: '',
+    description: '',
+    price: 0,
+    images: [],
+    details: []
+  })
+
+
+  // Reference to the specific document
+  const productDocRef = doc(collection(firestore, 'products'), id);
+
+  const getProduct = () => {
+    // Retrieve the document snapshot
+    getDoc(productDocRef)
+    .then((docSnapshot) => {
+      if (docSnapshot.exists()) {
+        // Document exists, you can access its data
+        const productData: any = docSnapshot.data();
+        setProduct(productData)
+      }
+    })
+    .catch((error) => {
+      console.error('Error getting document:', error);
+    });
+  }
+
+  useEffect(() => {
+   getProduct()
+  }, [])
+  
 
   return (
     <Box component="main" p={5}>
       <Toolbar />
       <Grid container spacing={2}>
         {/* Left column for images */}
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={7}>
           {/* Full width image */}
           <img
             style={{ width: "100%" }}
-            src="https://source.unsplash.com/1600x900/?car"
-            alt="sample"
+            src={product.images[0]}
+            alt={product.name}
           />
-          {/* Add more images as needed */}
-          <Box display="flex" justifyContent="space-between" mt={2}>
-            <img
-              style={{ width: "calc(50% - 8px)" }}
-              src="https://source.unsplash.com/1600x900/?car"
-              alt="sample"
-            />
-            <img
-              style={{ width: "calc(50% - 8px)" }}
-              src="https://source.unsplash.com/1600x900/?car"
-              alt="sample"
-            />
+          {/* Add more images as needed 1600x900 */}
+          <Box display="flex" flexWrap="wrap" justifyContent="space-between">
+            {product.images.slice(1).map((image, index) => (
+              <img
+                key={index}
+                style={{ width: "calc(50% - 8px)", height: "auto", marginBottom: 10 }}
+                src={image}
+                alt={product.name}
+              />
+            ))}
           </Box>
         </Grid>
         {/* Right column for product description */}
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={5}>
           <Typography variant="h4" gutterBottom>
-            Product Name
+            {product.name}
           </Typography>
           <Typography variant="h4" gutterBottom>
-            ₱ 605,000.00
+            {`₱ ${formatPrice(product.price)}.00`}
           </Typography>
           <Typography variant="body1">
-            Description of the product goes here. Lorem ipsum dolor sit amet,
-            consectetur adipiscing elit. Nullam scelerisque libero at libero
-            ultricies, non facilisis purus scelerisque.
+            {product.description}
           </Typography>
           {/* Add more product details here */}
           <List>
-            <ListItem>
-              <ListItemIcon sx={{ minWidth: 32 }}>
-                <CheckIcon color="secondary" />
-              </ListItemIcon>
-              Sample description 1
-            </ListItem>
-            <ListItem>
-              <ListItemIcon sx={{ minWidth: 32 }}>
-                <CheckIcon color="secondary" />
-              </ListItemIcon>
-              Sample description 2
-            </ListItem>
-            <ListItem>
-              <ListItemIcon sx={{ minWidth: 32 }}>
-                <CheckIcon color="secondary" />
-              </ListItemIcon>
-              Sample description 3
-            </ListItem>
+            {
+              product.details.map(detail => (
+                <ListItem key={detail}>
+                  <ListItemIcon sx={{ minWidth: 32 }}>
+                    <CheckIcon color="secondary" />
+                  </ListItemIcon>
+                  {detail}
+                </ListItem>
+              ))
+            }
           </List>
+          <Typography variant="subtitle1">
+            Contact us: 0915 481 4562
+          </Typography>
         </Grid>
       </Grid>
     </Box>

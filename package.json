@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emailjs/browser": "^4.3.3",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.14",
@@ -14,6 +15,8 @@
     "@types/node": "^16.18.91",
     "@types/react": "^18.2.73",
     "@types/react-dom": "^18.2.22",
+    "dotenv": "^16.4.5",
+    "firebase": "^10.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
