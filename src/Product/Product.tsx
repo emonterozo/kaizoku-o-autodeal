@@ -11,7 +11,6 @@ import CheckIcon from "@mui/icons-material/Check";
 import { useParams } from "react-router-dom";
 import { collection, doc, getDoc } from "firebase/firestore";
 
-
 import { firestore } from "../config/firebase";
 import { useEffect, useState } from "react";
 import { formatPrice } from "../utils/utils";
@@ -19,37 +18,35 @@ import { formatPrice } from "../utils/utils";
 const Product = () => {
   const { id } = useParams();
   const [product, setProduct] = useState({
-    id: '',
-    name: '',
-    description: '',
+    id: "",
+    name: "",
+    description: "",
     price: 0,
     images: [],
-    details: []
-  })
-
+    details: [],
+  });
 
   // Reference to the specific document
-  const productDocRef = doc(collection(firestore, 'products'), id);
+  const productDocRef = doc(collection(firestore, "products"), id);
 
   const getProduct = () => {
     // Retrieve the document snapshot
     getDoc(productDocRef)
-    .then((docSnapshot) => {
-      if (docSnapshot.exists()) {
-        // Document exists, you can access its data
-        const productData: any = docSnapshot.data();
-        setProduct(productData)
-      }
-    })
-    .catch((error) => {
-      console.error('Error getting document:', error);
-    });
-  }
+      .then((docSnapshot) => {
+        if (docSnapshot.exists()) {
+          // Document exists, you can access its data
+          const productData: any = docSnapshot.data();
+          setProduct(productData);
+        }
+      })
+      .catch((error) => {
+        console.error("Error getting document:", error);
+      });
+  };
 
   useEffect(() => {
-   getProduct()
-  }, [])
-  
+    getProduct();
+  }, []);
 
   return (
     <Box component="main" p={5}>
@@ -68,7 +65,11 @@ const Product = () => {
             {product.images.slice(1).map((image, index) => (
               <img
                 key={index}
-                style={{ width: "calc(50% - 8px)", height: "auto", marginBottom: 10 }}
+                style={{
+                  width: "calc(50% - 8px)",
+                  height: "auto",
+                  marginBottom: 10,
+                }}
                 src={image}
                 alt={product.name}
               />
@@ -83,25 +84,21 @@ const Product = () => {
           <Typography variant="h4" gutterBottom>
             {`₱ ${formatPrice(product.price)}.00`}
           </Typography>
-          <Typography variant="body1">
-            {product.description}
+          <Typography variant="body1" sx={{ whiteSpace: "pre-line" }}>
+            {product.description.replace(/\\n/g, "\n")}
           </Typography>
           {/* Add more product details here */}
           <List>
-            {
-              product.details.map(detail => (
-                <ListItem key={detail}>
-                  <ListItemIcon sx={{ minWidth: 32 }}>
-                    <CheckIcon color="secondary" />
-                  </ListItemIcon>
-                  {detail}
-                </ListItem>
-              ))
-            }
+            {product.details.map((detail) => (
+              <ListItem key={detail}>
+                <ListItemIcon sx={{ minWidth: 32 }}>
+                  <CheckIcon color="secondary" />
+                </ListItemIcon>
+                {detail}
+              </ListItem>
+            ))}
           </List>
-          <Typography variant="subtitle1">
-            Contact us: 0915 481 4562
-          </Typography>
+          <Typography variant="subtitle1">Contact us: 0915 481 4562</Typography>
         </Grid>
       </Grid>
     </Box>

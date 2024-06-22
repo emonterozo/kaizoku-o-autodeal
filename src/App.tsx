@@ -7,6 +7,7 @@ import { ThemeProvider, createTheme } from "@mui/material";
 import { Header } from "./components";
 import Home from "./Home/Home";
 import Product from "./Product/Product";
+import AdminProduct from "./Admin/Product";
 import Admin from "./Admin/Admin";
 import NotFoundPage from "./NotFoundPage/NotFoundPage";
 
@@ -36,6 +37,8 @@ export default function App() {
             <Route path="/product/:id" element={<Product />} />
           </Route>
           <Route path="/admin/:id" element={<Admin />} />
+          <Route path="/admin/add/:id" element={<AdminProduct />} />
+          <Route path="/admin/edit/:productId/:id" element={<AdminProduct />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>

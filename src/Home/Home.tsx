@@ -1,10 +1,6 @@
-import {
-  Box,
-  Toolbar,
-  useTheme,
-} from "@mui/material";
+import { Box, Toolbar, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getDocs, collection } from "firebase/firestore";
 
 import { firestore } from "../config/firebase";
@@ -12,45 +8,41 @@ import { Product } from "../types/types";
 import { ProductCard } from "../components";
 import Contact from "../Contact/Contact";
 
-
 export default function Home() {
   const theme = useTheme();
   const location = useLocation();
   const currentPath = location.pathname;
   const navigate = useNavigate();
-  
-  const [products, setProducts] = useState<Product[]>([])
 
-  
+  const [products, setProducts] = useState<Product[]>([]);
 
   const fetchProducts = () => {
-    getDocs(collection(firestore, 'products')).then(querySnapshot => {
-      const formattedProducts: any = querySnapshot.docs.map((doc) => (
-        {...doc.data(), id: doc.id}
-      ))
-      setProducts(formattedProducts)
-    })
-  }
-
+    getDocs(collection(firestore, "products")).then((querySnapshot) => {
+      const formattedProducts: any = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      setProducts(formattedProducts);
+    });
+  };
 
   useEffect(() => {
-    fetchProducts()
-  }, [])
-  
- 
+    fetchProducts();
+  }, []);
+
   useEffect(() => {
     // Scroll to the section corresponding to the new title
-    if (currentPath === '/') {
-        const targetSection = document.getElementById("banner");
-        if (targetSection) targetSection.scrollIntoView({ behavior: "smooth" });
+    if (currentPath === "/") {
+      const targetSection = document.getElementById("banner");
+      if (targetSection) targetSection.scrollIntoView({ behavior: "smooth" });
     } else {
-        const sectionId = currentPath.substring(1);
-        const targetSection = document.getElementById(sectionId);
-        if (targetSection) targetSection.scrollIntoView({ behavior: "smooth" });
+      const sectionId = currentPath.substring(1);
+      const targetSection = document.getElementById(sectionId);
+      if (targetSection) targetSection.scrollIntoView({ behavior: "smooth" });
     }
   }, [currentPath]);
 
-  const handlePressProduct = (id: string) => navigate(`/product/${id}`)
+  const handlePressProduct = (id: string) => navigate(`/product/${id}`);
 
   return (
     <Box component="main" bgcolor={theme.palette.primary.main}>
@@ -76,13 +68,11 @@ export default function Home() {
             backgroundColor: "whitesmoke",
           }}
         >
-         {
-          products.map(product => (
+          {products.map((product) => (
             <Box key={product.id} margin={1}>
               <ProductCard {...product} onPress={handlePressProduct} />
             </Box>
-          ))
-         }
+          ))}
         </Box>
 
         <Contact />
