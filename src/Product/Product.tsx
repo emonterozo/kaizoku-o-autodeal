@@ -10,6 +10,7 @@ import {
 import CheckIcon from "@mui/icons-material/Check";
 import { useParams } from "react-router-dom";
 import { collection, doc, getDoc } from "firebase/firestore";
+import { PhotoView, PhotoProvider } from "react-photo-view";
 
 import { firestore } from "../config/firebase";
 import { useEffect, useState } from "react";
@@ -46,6 +47,7 @@ const Product = () => {
 
   useEffect(() => {
     getProduct();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -53,39 +55,41 @@ const Product = () => {
       <Toolbar />
       <Grid container spacing={2}>
         {/* Left column for images */}
-        <Grid item xs={12} md={7}>
-          {/* Full width image */}
-          <img
-            style={{ width: "100%" }}
-            src={product.images[0]}
-            alt={product.name}
-          />
-          {/* Add more images as needed 1600x900 */}
-          <Box display="flex" flexWrap="wrap" justifyContent="space-between">
-            {product.images.slice(1).map((image, index) => (
+        <PhotoProvider>
+          <Grid item xs={12} md={7}>
+            {/* Full width image */}
+            <PhotoView src={product.images[0]}>
               <img
-                key={index}
-                style={{
-                  width: "calc(50% - 8px)",
-                  height: "auto",
-                  marginBottom: 10,
-                }}
-                src={image}
+                style={{ width: "100%" }}
+                src={product.images[0]}
                 alt={product.name}
               />
-            ))}
-          </Box>
-        </Grid>
+            </PhotoView>
+            {/* Add more images as needed 1600x900 */}
+            <Box display="flex" flexWrap="wrap" justifyContent="space-between">
+              {product.images.slice(1).map((image, index) => (
+                <PhotoView key={index} src={image}>
+                  <img
+                    style={{
+                      width: "calc(50% - 8px)",
+                      height: "auto",
+                      marginBottom: 10,
+                    }}
+                    src={image}
+                    alt={product.name}
+                  />
+                </PhotoView>
+              ))}
+            </Box>
+          </Grid>
+        </PhotoProvider>
         {/* Right column for product description */}
         <Grid item xs={12} md={5}>
           <Typography variant="h4" gutterBottom>
             {product.name}
           </Typography>
           <Typography variant="h4" gutterBottom>
-            {`₱ ${formatPrice(product.price)}.00`}
-          </Typography>
-          <Typography variant="body1" sx={{ whiteSpace: "pre-line" }}>
-            {product.description.replace(/\\n/g, "\n")}
+            {`P${formatPrice(product.price)}.00`}
           </Typography>
           {/* Add more product details here */}
           <List>
@@ -98,7 +102,9 @@ const Product = () => {
               </ListItem>
             ))}
           </List>
-          <Typography variant="subtitle1">Contact us: 0915 481 4562</Typography>
+          <Typography variant="body1" sx={{ whiteSpace: "pre-line" }}>
+            {product.description.replace(/\\n/g, "\n")}
+          </Typography>
         </Grid>
       </Grid>
     </Box>

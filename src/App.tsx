@@ -10,6 +10,7 @@ import Product from "./Product/Product";
 import AdminProduct from "./Admin/Product";
 import Admin from "./Admin/Admin";
 import NotFoundPage from "./NotFoundPage/NotFoundPage";
+import ProductPreview from "./Admin/ProductPreview";
 
 const theme = createTheme({
   palette: {
@@ -37,6 +38,10 @@ export default function App() {
             <Route path="/product/:id" element={<Product />} />
           </Route>
           <Route path="/admin/:id" element={<Admin />} />
+          <Route
+            path="/admin/product/:productId/:id"
+            element={<ProductPreview />}
+          />
           <Route path="/admin/add/:id" element={<AdminProduct />} />
           <Route path="/admin/edit/:productId/:id" element={<AdminProduct />} />
           <Route path="*" element={<NotFoundPage />} />

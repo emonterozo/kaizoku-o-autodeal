@@ -4,7 +4,9 @@ import {
   Grid,
   IconButton,
   Snackbar,
+  Switch,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -32,6 +34,7 @@ const INITIAL_FORM_DATA = {
   price: "",
   description: "",
   details: "",
+  isActive: true,
 };
 
 export default function Product() {
@@ -58,6 +61,7 @@ export default function Product() {
               price: productData.price.toString(),
               description: productData.description.replace(/\\n/g, "\n"),
               details: productData.details.join("\n"),
+              isActive: productData.isActive,
             });
             setImages(productData.images);
           }
@@ -79,12 +83,14 @@ export default function Product() {
   };
 
   const handlePressAdd = async () => {
+    console.log(formData.isActive);
     const data = {
       name: formData.model,
       price: parseInt(formData.price),
       description: formData.description,
       details: formData.details.split("\n"),
       images: images,
+      isActive: formData.isActive,
     };
 
     if (productId) {
@@ -112,6 +118,7 @@ export default function Product() {
           message: "New product successfully added.",
         });
       } catch (error) {
+        console.log(error);
         setSnackbar({
           isOpen: true,
           message: "Error ocurred adding new product.",
@@ -209,6 +216,14 @@ export default function Product() {
     }
   };
 
+  const toggleSwitch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("test", event.target.checked);
+    setFormData({
+      ...formData,
+      isActive: event.target.checked,
+    });
+  };
+
   if (id === process.env.REACT_APP_ADMIN_KEY) {
     return (
       <Box component="main" p={5}>
@@ -262,6 +277,10 @@ export default function Product() {
           </Grid>
           {/* Right column for product description */}
           <Grid item xs={12} md={5}>
+            <Box display="flex" flexDirection="row" alignItems="center">
+              <Switch checked={formData.isActive} onChange={toggleSwitch} />
+              <Typography variant="body1">For display</Typography>
+            </Box>
             <TextField
               fullWidth
               label="Model"
@@ -282,17 +301,6 @@ export default function Product() {
             />
             <TextField
               fullWidth
-              label="Description"
-              variant="outlined"
-              margin="normal"
-              multiline
-              rows={6}
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-            />
-            <TextField
-              fullWidth
               label="Details"
               variant="outlined"
               margin="normal"
@@ -300,6 +308,17 @@ export default function Product() {
               rows={10}
               name="details"
               value={formData.details}
+              onChange={handleChange}
+            />
+            <TextField
+              fullWidth
+              label="Description"
+              variant="outlined"
+              margin="normal"
+              multiline
+              rows={6}
+              name="description"
+              value={formData.description}
               onChange={handleChange}
             />
           </Grid>

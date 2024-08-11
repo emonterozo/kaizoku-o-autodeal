@@ -18,10 +18,12 @@ export default function Home() {
 
   const fetchProducts = () => {
     getDocs(collection(firestore, "products")).then((querySnapshot) => {
-      const formattedProducts: any = querySnapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
+      const formattedProducts: any = querySnapshot.docs
+        .filter((doc) => doc.data().isActive)
+        .map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
       setProducts(formattedProducts);
     });
   };
@@ -51,7 +53,12 @@ export default function Home() {
         <Box
           id="banner"
           sx={{
-            height: "100vh",
+            height: {
+              xs: "30vh",
+              sm: "40vh",
+              md: "29vh",
+              lg: "100vh",
+            },
             backgroundImage: 'url("/banner.png")',
             backgroundSize: "contain",
             backgroundRepeat: "no-repeat",

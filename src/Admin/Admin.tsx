@@ -32,7 +32,7 @@ export default function Product() {
 
   const handlePressProduct = (productId?: string) => {
     if (productId) {
-      navigate(`/admin/edit/${productId}/${id}`);
+      navigate(`/admin/product/${productId}/${id}`);
     } else {
       navigate(`/admin/add/${id}`);
     }
