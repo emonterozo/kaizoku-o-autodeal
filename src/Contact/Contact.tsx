@@ -37,12 +37,14 @@ export default function Contact() {
   if (isSm) variant = "h3";
   if (isMd) variant = "h2";
 
-  const handlePressSocial = (type: "facebook" | "tiktok") => {
-    const url =
-      type === "facebook"
-        ? "https://www.facebook.com/kaizokuoautodeal"
-        : "https://www.tiktok.com/@kaizokuoautodeal?_t=8l5DzkY0Wl5&_r=1";
-    window.open(url, "_blank");
+  const handlePressSocial = (type: "facebook" | "tiktok" | "instagram") => {
+    const url = {
+      facebook: "https://www.facebook.com/kaizokuoautodeal",
+      tiktok: "https://www.tiktok.com/@kaizokuoautodeal?_t=8l5DzkY0Wl5&_r=1",
+      instagram: "https://www.instagram.com/kaizokuoautodeal?igsh=ZGUzMzM3NWJiOQ=="
+    }
+
+    window.open(url[type], "_blank");
   };
 
   const sendEmail = (e: any) => {
@@ -72,7 +74,7 @@ export default function Contact() {
         setSnackbar({
           isOpen: true,
           message: 'Something when wrong. Please try again.'
-         })
+        })
       }
     );
   };
@@ -95,7 +97,11 @@ export default function Contact() {
         </Typography>
         {/* Contact form fields */}
         <form onSubmit={sendEmail}>
-          <Box display="flex" justifyContent="space-between" gap={2}>
+          <Box display={{
+            xs: undefined,
+            sm: undefined,
+            md: "flex"
+          }} justifyContent="space-between" gap={2}>
             <TextField
               fullWidth
               label="Name"
@@ -137,6 +143,7 @@ export default function Contact() {
           />
           {/* Submit button */}
           <Button
+
             type="submit"
             variant="contained"
             color="primary"
@@ -165,7 +172,7 @@ export default function Contact() {
             </svg>
           </IconButton>
           <IconButton
-            aria-label="Twitter"
+            aria-label="Tiktok"
             onClick={() => handlePressSocial("tiktok")}
           >
             <svg
@@ -197,6 +204,14 @@ export default function Contact() {
               </g>
             </svg>
           </IconButton>
+          <IconButton
+            aria-label="Instagram"
+            onClick={() => handlePressSocial("instagram")}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" fill="#1e2127" width="40" height="40" viewBox="0 0 50 50">
+              <path d="M 16 3 C 8.83 3 3 8.83 3 16 L 3 34 C 3 41.17 8.83 47 16 47 L 34 47 C 41.17 47 47 41.17 47 34 L 47 16 C 47 8.83 41.17 3 34 3 L 16 3 z M 37 11 C 38.1 11 39 11.9 39 13 C 39 14.1 38.1 15 37 15 C 35.9 15 35 14.1 35 13 C 35 11.9 35.9 11 37 11 z M 25 14 C 31.07 14 36 18.93 36 25 C 36 31.07 31.07 36 25 36 C 18.93 36 14 31.07 14 25 C 14 18.93 18.93 14 25 14 z M 25 16 C 20.04 16 16 20.04 16 25 C 16 29.96 20.04 34 25 34 C 29.96 34 34 29.96 34 25 C 34 20.04 29.96 16 25 16 z"></path>
+            </svg>
+          </IconButton>
         </Box>
       </Box>
       <Container
@@ -212,17 +227,17 @@ export default function Contact() {
         </Typography>
       </Container>
       <Snackbar
-          open={snackbar.isOpen}
-          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-          autoHideDuration={3000}
-          onClose={() => {
-            setSnackbar({
-              isOpen: false,
-              message: "",
-            });
-          }}
-          message={snackbar.message}
-        />
+        open={snackbar.isOpen}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        autoHideDuration={3000}
+        onClose={() => {
+          setSnackbar({
+            isOpen: false,
+            message: "",
+          });
+        }}
+        message={snackbar.message}
+      />
     </Box>
   );
 }
