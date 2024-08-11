@@ -53,13 +53,11 @@ export default function Home() {
         <Box
           id="banner"
           sx={{
-            height: {
-              xs: "30vh",
-              sm: "40vh",
-              md: "29vh",
-              lg: "100vh",
+            height: '100vh',
+            backgroundImage: {
+              xs: 'url("/mobile-banner.png")',
+              md: 'url("/banner.png")',
             },
-            backgroundImage: 'url("/banner.png")',
             backgroundSize: "contain",
             backgroundRepeat: "no-repeat",
           }}

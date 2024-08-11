@@ -7,17 +7,24 @@ import {
   Container,
   useTheme,
   useMediaQuery,
+  Snackbar,
 } from "@mui/material";
 import { ChangeEvent, useState } from "react";
 import emailjs from "@emailjs/browser";
 import { Variant } from "@mui/material/styles/createTypography";
 
+const INITIAL_FORM_DATA = {
+  name: "",
+  email: "",
+  phoneNumber: "",
+  message: "",
+}
+
 export default function Contact() {
   const theme = useTheme();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phoneNumber: "",
+  const [formData, setFormData] = useState(INITIAL_FORM_DATA);
+  const [snackbar, setSnackbar] = useState({
+    isOpen: false,
     message: "",
   });
   const isXs = useMediaQuery(theme.breakpoints.only("xs"));
@@ -54,11 +61,18 @@ export default function Contact() {
     };
 
     emailjs.send(serviceId, templateId, emailTemplate, publicKey).then(
-      (response) => {
-        console.log("SUCCESS!", response.status, response.text);
+      () => {
+        setFormData(INITIAL_FORM_DATA)
+        setSnackbar({
+          isOpen: true,
+          message: 'Thank you for your inquiry. We will get back to you shortly.'
+        })
       },
-      (error) => {
-        console.log("FAILED...", error);
+      () => {
+        setSnackbar({
+          isOpen: true,
+          message: 'Something when wrong. Please try again.'
+         })
       }
     );
   };
@@ -99,8 +113,6 @@ export default function Contact() {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              error={false}
-              //helperText="Please input a valid email."
             />
           </Box>
           <TextField
@@ -199,6 +211,18 @@ export default function Contact() {
           © 2024 Kaizoku-0 Autodeal. All rights reserved.
         </Typography>
       </Container>
+      <Snackbar
+          open={snackbar.isOpen}
+          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+          autoHideDuration={3000}
+          onClose={() => {
+            setSnackbar({
+              isOpen: false,
+              message: "",
+            });
+          }}
+          message={snackbar.message}
+        />
     </Box>
   );
 }
