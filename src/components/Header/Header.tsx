@@ -49,7 +49,7 @@ export function Header(props: Props) {
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
-        Kaizoku-O Autodeal
+        EmJay Garage
       </Typography>
       <Divider />
       <List>
@@ -90,7 +90,7 @@ export function Header(props: Props) {
               component="div"
               sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
             >
-              Kaizoku-O Autodeal
+              EmJay Garage
             </Typography>
             <Box sx={{ display: { xs: "none", sm: "block" } }}>
               {navItems.map((item) => (

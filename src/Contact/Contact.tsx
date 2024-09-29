@@ -57,7 +57,7 @@ export default function Contact() {
     const emailTemplate = {
       from_name: formData.name,
       from_email: formData.email,
-      to_name: "Kaizoku-O Autodeal",
+      to_name: "EmJay Garage",
       contact_number: formData.phoneNumber,
       message: formData.message,
     };
@@ -223,7 +223,7 @@ export default function Contact() {
         }}
       >
         <Typography variant="body1" align="center">
-          © 2024 Kaizoku-0 Autodeal. All rights reserved.
+          © 2024 EmJay Garage. All rights reserved.
         </Typography>
       </Container>
       <Snackbar
