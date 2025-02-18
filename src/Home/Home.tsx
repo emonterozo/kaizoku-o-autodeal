@@ -7,8 +7,10 @@ import {
   CardMedia,
   Card,
   IconButton,
+  Drawer,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getDocs, collection } from "firebase/firestore";
@@ -31,6 +33,7 @@ export default function Home() {
     undefined
   );
   const [randomProducts, setRandomProducts] = useState<Product[]>([]);
+  const [isOpen, setIsOpen] = useState(false);
 
   const fetchProducts = () => {
     getDocs(collection(firestore, "products")).then((querySnapshot) => {
@@ -76,6 +79,8 @@ export default function Home() {
   }, [currentPath]);
 
   const handlePressProduct = (id: string) => navigate(`/product/${id}`);
+
+  const toggleDrawer = () => setIsOpen(!isOpen);
 
   return (
     <Box component="main" bgcolor={theme.palette.primary.main}>
@@ -126,7 +131,7 @@ export default function Home() {
               color="inherit"
               aria-label="open drawer"
               edge="start"
-              onClick={() => {}}
+              onClick={toggleDrawer}
               sx={{
                 display: { sm: "none" },
                 color: "#ffffff",
@@ -135,6 +140,77 @@ export default function Home() {
               <MenuIcon />
             </IconButton>
           </Box>
+          <Drawer
+            anchor="left"
+            open={isOpen}
+            onClose={toggleDrawer}
+            sx={{
+              "& .MuiDrawer-paper": {
+                width: "100%",
+
+                bgcolor: theme.palette.primary.main,
+                color: "#ffffff",
+              },
+            }}
+          >
+            <IconButton
+              onClick={toggleDrawer}
+              sx={{
+                color: "#ffffff",
+                position: "absolute",
+                right: 0,
+              }}
+            >
+              <CloseOutlinedIcon />
+            </IconButton>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                height: "100vh",
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "30px",
+                  marginTop: "50%",
+                  paddingX: "10px",
+                }}
+              >
+                {OPTIONS.map((item) => (
+                  <Typography
+                    key={item.label}
+                    sx={{
+                      fontSize: "32px",
+                      color: "#D9D9D9",
+                      cursor: "pointer",
+                      "&:hover": { color: "#FFFFFF" },
+                    }}
+                    onClick={() => {
+                      toggleDrawer();
+                      navigate(item.path);
+                    }}
+                  >
+                    {item.label}
+                  </Typography>
+                ))}
+              </Box>
+              <Typography
+                sx={{
+                  fontSize: "16px",
+                  color: "#D9D9D9",
+                  paddingX: "10px",
+                  textAlign: "center",
+                  paddingBottom: "15px",
+                }}
+              >
+                EmJay Garage
+              </Typography>
+            </Box>
+          </Drawer>
           <Box
             sx={{
               position: "absolute",

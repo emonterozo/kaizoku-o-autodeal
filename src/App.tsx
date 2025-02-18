@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 //<a target="_blank" href="https://icons8.com/icon/8818/facebook">Facebook</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
 
 import { ThemeProvider, createTheme } from "@mui/material";
-import { Header } from "./components";
 import Home from "./Home/Home";
 import Product from "./Product/Product";
 import AdminProduct from "./Admin/Product";

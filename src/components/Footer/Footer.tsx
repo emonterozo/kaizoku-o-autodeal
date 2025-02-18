@@ -53,7 +53,7 @@ export const Footer = () => {
     <Box
       sx={{
         paddingX: "5%",
-        paddingY: {
+        paddingTop: {
           xs: "10%",
           lg: "5%",
         },

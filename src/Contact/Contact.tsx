@@ -3,16 +3,11 @@ import {
   Typography,
   TextField,
   Button,
-  IconButton,
-  Container,
-  useTheme,
-  useMediaQuery,
   Snackbar,
   Grid,
 } from "@mui/material";
 import { ChangeEvent, useState } from "react";
 import emailjs from "@emailjs/browser";
-import { Variant } from "@mui/material/styles/createTypography";
 
 const INITIAL_FORM_DATA = {
   name: "",
@@ -22,32 +17,11 @@ const INITIAL_FORM_DATA = {
 };
 
 export default function Contact() {
-  const theme = useTheme();
   const [formData, setFormData] = useState(INITIAL_FORM_DATA);
   const [snackbar, setSnackbar] = useState({
     isOpen: false,
     message: "",
   });
-  const isXs = useMediaQuery(theme.breakpoints.only("xs"));
-  const isSm = useMediaQuery(theme.breakpoints.only("sm"));
-  const isMd = useMediaQuery(theme.breakpoints.only("md"));
-
-  let variant: Variant | "inherit" = "h2";
-  if (isXs) variant = "h4";
-  if (isXs) variant = "h4";
-  if (isSm) variant = "h3";
-  if (isMd) variant = "h2";
-
-  const handlePressSocial = (type: "facebook" | "tiktok" | "instagram") => {
-    const url = {
-      facebook: "https://www.facebook.com/kaizokuoautodeal",
-      tiktok: "https://www.tiktok.com/@kaizokuoautodeal?_t=8l5DzkY0Wl5&_r=1",
-      instagram:
-        "https://www.instagram.com/kaizokuoautodeal?igsh=ZGUzMzM3NWJiOQ==",
-    };
-
-    window.open(url[type], "_blank");
-  };
 
   const sendEmail = (e: any) => {
     e.preventDefault();
@@ -161,94 +135,10 @@ export default function Contact() {
             Fill out the following form and we will get back at you in the next
             24 hours.
           </Typography>
-          <Grid container spacing={3} sx={{ marginTop: "32px" }}>
-            {/* Name & Phone Fields */}
-            <Grid item xs={12} md={6}>
-              <Typography color="#D9D9D9" sx={{ fontSize: "12px" }}>
-                Name
-              </Typography>
-              <TextField
-                fullWidth
-                variant="outlined"
-                margin="normal"
-                name="name"
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Typography color="#D9D9D9" sx={{ fontSize: "12px" }}>
-                Phone
-              </Typography>
-              <TextField
-                fullWidth
-                variant="outlined"
-                margin="normal"
-                name="phone"
-                type="tel"
-              />
-            </Grid>
-
-            {/* Email Field */}
-            <Grid item xs={12}>
-              <Typography color="#D9D9D9" sx={{ fontSize: "12px" }}>
-                Email
-              </Typography>
-              <TextField
-                fullWidth
-                variant="outlined"
-                margin="normal"
-                name="email"
-                type="email"
-              />
-            </Grid>
-
-            {/* Message Field */}
-            <Grid item xs={12}>
-              <Typography color="#D9D9D9" sx={{ fontSize: "12px" }}>
-                Message
-              </Typography>
-              <TextField
-                fullWidth
-                multiline
-                rows={5}
-                variant="outlined"
-                margin="normal"
-                name="message"
-                placeholder="Type your message.."
-              />
-            </Grid>
-
-            {/* Submit Button */}
-            <Grid item xs={12} display="flex" justifyContent="start">
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                sx={{ width: "30%" }}
-              >
-                Send
-              </Button>
-            </Grid>
-          </Grid>
-
-          {/* <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "24px",
-              marginTop: "32px",
-              width: "90%",
-            }}
-          >
-            <Box
-              display={{
-                xs: undefined,
-                sm: undefined,
-                md: "flex",
-              }}
-              justifyContent="space-between"
-              gap={2}
-            >
-              <Box width="100%">
+          <form onSubmit={sendEmail}>
+            <Grid container spacing={3} sx={{ marginTop: "32px" }}>
+              {/* Name & Phone Fields */}
+              <Grid item xs={12} md={6}>
                 <Typography color="#D9D9D9" sx={{ fontSize: "12px" }}>
                   Name
                 </Typography>
@@ -257,9 +147,11 @@ export default function Contact() {
                   variant="outlined"
                   margin="normal"
                   name="name"
+                  value={formData.name}
+                  onChange={handleChange}
                 />
-              </Box>
-              <Box width="100%">
+              </Grid>
+              <Grid item xs={12} md={6}>
                 <Typography color="#D9D9D9" sx={{ fontSize: "12px" }}>
                   Phone
                 </Typography>
@@ -267,48 +159,77 @@ export default function Contact() {
                   fullWidth
                   variant="outlined"
                   margin="normal"
-                  name="name"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
                   type="tel"
                 />
-              </Box>
-            </Box>
-            <Box sx={{ display: "flex", flexDirection: "column" }}>
-              <Typography color="#D9D9D9" sx={{ fontSize: "12px" }}>
-                Email
-              </Typography>
-              <TextField
-                fullWidth
-                variant="outlined"
-                margin="normal"
-                name="name"
-                type="email"
-              />
-            </Box>
-            <Box sx={{ display: "flex", flexDirection: "column" }}>
-              <Typography color="#D9D9D9" sx={{ fontSize: "12px" }}>
-                Message
-              </Typography>
-              <TextField
-                fullWidth
-                multiline
-                rows={4}
-                variant="outlined"
-                margin="normal"
-                name="name"
-                placeholder="Type your message.."
-              />
-            </Box>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              sx={{ width: "30%" }}
-            >
-              Send
-            </Button>
-          </Box> */}
+              </Grid>
+
+              {/* Email Field */}
+              <Grid item xs={12}>
+                <Typography color="#D9D9D9" sx={{ fontSize: "12px" }}>
+                  Email
+                </Typography>
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  margin="normal"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </Grid>
+
+              {/* Message Field */}
+              <Grid item xs={12}>
+                <Typography color="#D9D9D9" sx={{ fontSize: "12px" }}>
+                  Message
+                </Typography>
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={5}
+                  variant="outlined"
+                  margin="normal"
+                  name="message"
+                  placeholder="Type your message.."
+                  value={formData.message}
+                  onChange={handleChange}
+                />
+              </Grid>
+
+              {/* Submit Button */}
+              <Grid item xs={12} display="flex" justifyContent="start">
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="secondary"
+                  sx={{ width: "30%" }}
+                >
+                  Send
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
         </Box>
       </Box>
+      <Snackbar
+        open={snackbar.isOpen}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        ContentProps={{
+          sx: { backgroundColor: "#4BB543", fontFamily: "Poppins" },
+        }}
+        autoHideDuration={3000}
+        onClose={() => {
+          setSnackbar({
+            isOpen: false,
+            message: "",
+          });
+        }}
+        message={snackbar.message}
+      />
     </Box>
   );
 }

@@ -36,11 +36,6 @@ const CustomCheckIcon = () => (
 const Product = () => {
   const { id } = useParams();
   const theme = useTheme();
-  const isXs = useMediaQuery(theme.breakpoints.up("xs"));
-  const isSm = useMediaQuery(theme.breakpoints.up("sm"));
-  const isMd = useMediaQuery(theme.breakpoints.up("md"));
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const containerRef: RefObject<HTMLDivElement> = useRef<HTMLDivElement>(null);
   const leftGridRef: RefObject<HTMLDivElement> = useRef(null);
   const [leftGridHeight, setLeftGridHeight] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -58,6 +53,7 @@ const Product = () => {
         })
       );
 
+      window.scrollTo({ top: 0, behavior: "smooth" });
       setProduct(formattedProducts.find((item) => item.id === productId));
       const filteredProducts = formattedProducts.filter(
         (item) => item.id !== productId
@@ -78,26 +74,6 @@ const Product = () => {
       setLeftGridHeight(leftGridRef.current.clientHeight + 80);
     }
   }, [product, id]);
-
-  // Update the current image index based on scroll position
-  const handleScroll = () => {
-    const container = containerRef.current;
-    if (container) {
-      const index = Math.round(container.scrollLeft / container.clientWidth);
-      setCurrentIndex(index);
-    }
-  };
-
-  useEffect(() => {
-    if (isSm || isXs) {
-      setCurrentIndex(0);
-      const container = containerRef.current;
-      if (container) {
-        container.addEventListener("scroll", handleScroll);
-        return () => container.removeEventListener("scroll", handleScroll);
-      }
-    }
-  }, [isSm, isXs]);
 
   const scroll = (direction: string) => {
     if (scrollRef.current) {
@@ -281,93 +257,43 @@ const Product = () => {
             </Box>
           </Grid>
 
-          <PhotoProvider>
-            <Grid item xs={12} md={6}>
-              <Grid
-                container
-                spacing={{
-                  xs: 1,
-                  md: 2,
-                }}
-              >
+          {product && (
+            <PhotoProvider>
+              <Grid item xs={12} md={6}>
                 <Grid
-                  item
-                  xs={12}
-                  sx={{ display: { xs: "none", sm: "block" } }}
+                  container
+                  spacing={{
+                    xs: 1,
+                    md: 2,
+                  }}
                 >
-                  <PhotoView src={product?.images[0]}>
-                    <Card
-                      sx={{
-                        borderRadius: "24px",
-                        height: `${leftGridHeight * 0.5}px`,
-                        overflow: "hidden",
-                      }}
-                    >
-                      <CardMedia
-                        component="img"
-                        image={product?.images[0]}
-                        sx={{ height: `${leftGridHeight * 0.5}px` }}
-                      />
-                    </Card>
-                  </PhotoView>
-                </Grid>
-
-                <Box sx={{ position: "relative" }}>
-                  <IconButton
-                    sx={{
-                      position: "absolute",
-                      left: 10,
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      zIndex: 10,
-                      backgroundColor: "rgba(0,0,0,0.5)",
-                      color: "white",
-                      "&:hover": { backgroundColor: "rgba(0,0,0,0.7)" },
-                    }}
-                    onClick={() => scroll("left")}
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{ display: { xs: "none", sm: "block" } }}
                   >
-                    <ChevronLeft style={{ width: "35px", height: "35px" }} />
-                  </IconButton>
-                  <Box
-                    ref={scrollRef}
-                    sx={{
-                      overflowX: "auto",
-                      whiteSpace: "nowrap",
-                      display: "flex",
-                      gap: "15px",
-                      paddingTop: "20px",
-                      paddingX: "5px",
-                      scrollbarWidth: "none",
-                      "&::-webkit-scrollbar": { display: "none" },
-                    }}
-                  >
-                    {product?.images.slice(1).map((image, index) => (
-                      <PhotoView src={image} key={index}>
-                        <Card
-                          sx={{
-                            borderRadius: "24px",
-                            overflow: "hidden",
-                            height: `${leftGridHeight * 0.4}px`,
-                            flex: "0 0 auto",
-                            width: {
-                              md: "100%",
-                              lg: "49%",
-                            },
-                          }}
-                        >
-                          <CardMedia
-                            component="img"
-                            image={image}
-                            sx={{ height: `${leftGridHeight * 0.4}px` }}
-                          />
-                        </Card>
-                      </PhotoView>
-                    ))}
+                    <PhotoView src={product?.images[0]}>
+                      <Card
+                        sx={{
+                          borderRadius: "24px",
+                          height: `${leftGridHeight * 0.5}px`,
+                          overflow: "hidden",
+                        }}
+                      >
+                        <CardMedia
+                          component="img"
+                          image={product?.images[0]}
+                          sx={{ height: `${leftGridHeight * 0.5}px` }}
+                        />
+                      </Card>
+                    </PhotoView>
+                  </Grid>
 
+                  <Box sx={{ position: "relative" }}>
                     <IconButton
                       sx={{
                         position: "absolute",
-                        right: 10,
+                        left: 10,
                         top: "50%",
                         transform: "translateY(-50%)",
                         zIndex: 10,
@@ -375,15 +301,69 @@ const Product = () => {
                         color: "white",
                         "&:hover": { backgroundColor: "rgba(0,0,0,0.7)" },
                       }}
-                      onClick={() => scroll("right")}
+                      onClick={() => scroll("left")}
                     >
-                      <ChevronRight style={{ width: "35px", height: "35px" }} />
+                      <ChevronLeft style={{ width: "35px", height: "35px" }} />
                     </IconButton>
+                    <Box
+                      ref={scrollRef}
+                      sx={{
+                        overflowX: "auto",
+                        whiteSpace: "nowrap",
+                        display: "flex",
+                        gap: "15px",
+                        paddingTop: "20px",
+                        paddingX: "5px",
+                        scrollbarWidth: "none",
+                        "&::-webkit-scrollbar": { display: "none" },
+                      }}
+                    >
+                      {product?.images.slice(1).map((image, index) => (
+                        <PhotoView src={image} key={index}>
+                          <Card
+                            sx={{
+                              borderRadius: "24px",
+                              overflow: "hidden",
+                              height: `${leftGridHeight * 0.4}px`,
+                              flex: "0 0 auto",
+                              width: {
+                                md: "100%",
+                                lg: "49%",
+                              },
+                            }}
+                          >
+                            <CardMedia
+                              component="img"
+                              image={image}
+                              sx={{ height: `${leftGridHeight * 0.4}px` }}
+                            />
+                          </Card>
+                        </PhotoView>
+                      ))}
+
+                      <IconButton
+                        sx={{
+                          position: "absolute",
+                          right: 10,
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                          zIndex: 10,
+                          backgroundColor: "rgba(0,0,0,0.5)",
+                          color: "white",
+                          "&:hover": { backgroundColor: "rgba(0,0,0,0.7)" },
+                        }}
+                        onClick={() => scroll("right")}
+                      >
+                        <ChevronRight
+                          style={{ width: "35px", height: "35px" }}
+                        />
+                      </IconButton>
+                    </Box>
                   </Box>
-                </Box>
+                </Grid>
               </Grid>
-            </Grid>
-          </PhotoProvider>
+            </PhotoProvider>
+          )}
         </Grid>
       </Box>
       <Box
