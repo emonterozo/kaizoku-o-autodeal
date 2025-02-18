@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 //<a target="_blank" href="https://icons8.com/icon/8818/facebook">Facebook</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
 
 import { ThemeProvider, createTheme } from "@mui/material";
-import { Header } from "./components";
 import Home from "./Home/Home";
 import Product from "./Product/Product";
 import AdminProduct from "./Admin/Product";
@@ -15,14 +14,41 @@ import ProductPreview from "./Admin/ProductPreview";
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#1e2127",
+      main: "#0C0E0D",
     },
     secondary: {
-      main: "#e6ab44",
+      main: "#D9D9D9",
     },
   },
   typography: {
-    fontFamily: "Garet-Book, Garet-Heavy, sans-serif",
+    fontFamily: "Centauri, sans-serif",
+  },
+  components: {
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          "& .MuiInputBase-input::placeholder": {
+            color: "#A0A0A0", // Placeholder text color
+            fontFamily: "Poppins",
+          },
+          "& .MuiInputBase-input": {
+            color: "#D9D9D9", // Input text color
+            fontFamily: "Poppins", // Default font for input text
+          },
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "#D9D9D9", // Default border color
+            },
+            "&:hover fieldset": {
+              borderColor: "#D9D9D9 !important", // Hover color
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#1976D2 !important", // Focused color
+            },
+          },
+        },
+      },
+    },
   },
 });
 
@@ -31,9 +57,11 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Header />}>
+          <Route path="/">
             <Route index element={<Home />} />
             <Route path="/catalog" element={<Home />} />
+            <Route path="/products" element={<Home />} />
+            <Route path="/why-choose-us" element={<Home />} />
             <Route path="/contact" element={<Home />} />
             <Route path="/product/:id" element={<Product />} />
           </Route>

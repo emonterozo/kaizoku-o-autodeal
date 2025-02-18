@@ -34,6 +34,8 @@ const INITIAL_FORM_DATA = {
   price: "",
   description: "",
   details: "",
+  financingDetails: "",
+  downpayment: "",
   isActive: true,
 };
 
@@ -56,12 +58,23 @@ export default function Product() {
             // Document exists, you can access its data
             const productData: any = docSnapshot.data();
 
+            let resultString = "";
+
+            if (productData.financing_details?.terms) {
+              resultString = productData.financing_details?.terms
+                // @ts-ignore
+                .map(({ term, amount }) => `${term} ${amount}`)
+                .join("\n");
+            }
+
             setFormData({
               model: productData.name,
               price: productData.price.toString(),
-              description: productData.description.replace(/\\n/g, "\n"),
+              description: productData.headline.replace(/\\n/g, "\n"),
               details: productData.details.join("\n"),
               isActive: productData.isActive,
+              financingDetails: resultString,
+              downpayment: productData.financing_details.downpayment,
             });
             setImages(productData.images);
           }
@@ -83,14 +96,27 @@ export default function Product() {
   };
 
   const handlePressAdd = async () => {
-    console.log(formData.isActive);
+    const result = formData.financingDetails.split("\n").map((line) => {
+      const [term, amount] = line.split(" ").map(Number);
+      return { term, amount };
+    });
     const data = {
       name: formData.model,
       price: parseInt(formData.price),
-      description: formData.description,
+      headline: formData.description,
       details: formData.details.split("\n"),
       images: images,
       isActive: formData.isActive,
+      is_active: formData.isActive,
+      is_featured: false,
+      is_sold: false,
+      financing_details:
+        formData.financingDetails.length > 0
+          ? {
+              downpayment: parseInt(formData.downpayment),
+              terms: result,
+            }
+          : [],
     };
 
     if (productId) {
@@ -319,6 +345,28 @@ export default function Product() {
               rows={6}
               name="description"
               value={formData.description}
+              onChange={handleChange}
+            />
+            <TextField
+              fullWidth
+              label="Downpayment"
+              variant="outlined"
+              margin="normal"
+              multiline
+              rows={10}
+              name="downpayment"
+              value={formData.downpayment}
+              onChange={handleChange}
+            />
+            <TextField
+              fullWidth
+              label="Financing Details"
+              variant="outlined"
+              margin="normal"
+              multiline
+              rows={10}
+              name="financingDetails"
+              value={formData.financingDetails}
               onChange={handleChange}
             />
           </Grid>
