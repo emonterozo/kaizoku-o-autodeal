@@ -42,11 +42,15 @@ export default function Home() {
         id: doc.id.toString(),
       }));
 
-      const notFeaturedProducts = formattedProducts.filter(
-        (item) => !item.is_featured
+      const featuredProductHolder = formattedProducts.find(
+        (product) => product.is_featured
+      );
+
+      const otherProducts = formattedProducts.filter(
+        (item) => item.id !== featuredProductHolder?.id && item.is_active
       );
       // Shuffle the array using Fisher-Yates algorithm
-      const shuffled = [...notFeaturedProducts].sort(() => Math.random() - 0.5);
+      const shuffled = [...otherProducts].sort(() => Math.random() - 0.5);
 
       // Pick the top 3 random products
       const randomProductsHolder = shuffled.slice(0, 3);
@@ -54,9 +58,7 @@ export default function Home() {
       // Store the remaining products
       const remainingProducts = shuffled.slice(3);
 
-      setFeaturedProduct(
-        formattedProducts.find((product) => product.is_featured)
-      );
+      setFeaturedProduct(featuredProductHolder);
       setProducts(remainingProducts);
       setRandomProducts(randomProductsHolder);
     });

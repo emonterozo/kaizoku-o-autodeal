@@ -37,6 +37,8 @@ const INITIAL_FORM_DATA = {
   financingDetails: "",
   downpayment: "",
   isActive: true,
+  isFeatured: false,
+  isSold: false,
 };
 
 export default function Product() {
@@ -72,7 +74,9 @@ export default function Product() {
               price: productData.price.toString(),
               description: productData.headline.replace(/\\n/g, "\n"),
               details: productData.details.join("\n"),
-              isActive: productData.isActive,
+              isActive: productData.is_active,
+              isFeatured: productData.is_featured,
+              isSold: productData.is_sold,
               financingDetails: resultString,
               downpayment: productData.financing_details.downpayment,
             });
@@ -106,10 +110,9 @@ export default function Product() {
       headline: formData.description,
       details: formData.details.split("\n"),
       images: images,
-      isActive: formData.isActive,
       is_active: formData.isActive,
-      is_featured: false,
-      is_sold: false,
+      is_featured: formData.isFeatured,
+      is_sold: formData.isSold,
       financing_details:
         formData.financingDetails.length > 0
           ? {
@@ -118,6 +121,7 @@ export default function Product() {
             }
           : [],
     };
+    console.log(data);
 
     if (productId) {
       try {
@@ -242,11 +246,13 @@ export default function Product() {
     }
   };
 
-  const toggleSwitch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("test", event.target.checked);
+  const toggleSwitch = (
+    key: any,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setFormData({
       ...formData,
-      isActive: event.target.checked,
+      [key]: event.target.checked,
     });
   };
 
@@ -304,8 +310,25 @@ export default function Product() {
           {/* Right column for product description */}
           <Grid item xs={12} md={5}>
             <Box display="flex" flexDirection="row" alignItems="center">
-              <Switch checked={formData.isActive} onChange={toggleSwitch} />
-              <Typography variant="body1">For display</Typography>
+              <Switch
+                checked={formData.isActive}
+                onChange={(e) => toggleSwitch("isActive", e)}
+              />
+              <Typography variant="body1">Display</Typography>
+            </Box>
+            <Box display="flex" flexDirection="row" alignItems="center">
+              <Switch
+                checked={formData.isFeatured}
+                onChange={(e) => toggleSwitch("isFeatured", e)}
+              />
+              <Typography variant="body1">Featured</Typography>
+            </Box>
+            <Box display="flex" flexDirection="row" alignItems="center">
+              <Switch
+                checked={formData.isSold}
+                onChange={(e) => toggleSwitch("isSold", e)}
+              />
+              <Typography variant="body1">Sold</Typography>
             </Box>
             <TextField
               fullWidth
@@ -315,6 +338,13 @@ export default function Product() {
               name="model"
               value={formData.model}
               onChange={handleChange}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& input": {
+                    color: "black",
+                  },
+                },
+              }}
             />
             <TextField
               fullWidth
@@ -324,6 +354,13 @@ export default function Product() {
               name="price"
               value={formData.price}
               onChange={handleChange}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& input": {
+                    color: "black",
+                  },
+                },
+              }}
             />
             <TextField
               fullWidth
@@ -335,6 +372,13 @@ export default function Product() {
               name="details"
               value={formData.details}
               onChange={handleChange}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& textarea": {
+                    color: "black",
+                  },
+                },
+              }}
             />
             <TextField
               fullWidth
@@ -346,6 +390,13 @@ export default function Product() {
               name="description"
               value={formData.description}
               onChange={handleChange}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& textarea": {
+                    color: "black",
+                  },
+                },
+              }}
             />
             <TextField
               fullWidth
@@ -357,6 +408,13 @@ export default function Product() {
               name="downpayment"
               value={formData.downpayment}
               onChange={handleChange}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& textarea": {
+                    color: "black",
+                  },
+                },
+              }}
             />
             <TextField
               fullWidth
@@ -368,6 +426,13 @@ export default function Product() {
               name="financingDetails"
               value={formData.financingDetails}
               onChange={handleChange}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& textarea": {
+                    color: "black",
+                  },
+                },
+              }}
             />
           </Grid>
         </Grid>
