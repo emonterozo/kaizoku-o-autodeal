@@ -21,6 +21,7 @@ import { Footer, WhyChooseUs, OtherProducts } from "../components";
 import Contact from "../Contact/Contact";
 import { formatPrice } from "../utils/utils";
 import { OPTIONS } from "../utils/constant";
+import FacebookMessage from "../components/FacebookMessage/FacebookMessage";
 
 export default function Home() {
   const theme = useTheme();
@@ -125,7 +126,7 @@ export default function Home() {
                 color: "#ffffff",
               }}
             >
-              EmJay
+              Emjay
               <br />
               Garage
             </Typography>
@@ -209,7 +210,7 @@ export default function Home() {
                   paddingBottom: "15px",
                 }}
               >
-                EmJay Garage
+                Emjay Garage
               </Typography>
             </Box>
           </Drawer>
@@ -238,7 +239,7 @@ export default function Home() {
                 color: "#D9D9D9",
               }}
             >
-              EmJay Garage
+              Emjay Garage
             </Typography>
             {OPTIONS.map((item) => (
               <Typography
@@ -435,6 +436,7 @@ export default function Home() {
         </Box>
         <Contact />
         <Footer />
+        <FacebookMessage />
       </Box>
     </Box>
   );

@@ -81,7 +81,7 @@ export const Footer = () => {
                 color: "#D9D9D9",
               }}
             >
-              EmJay Garage
+              Emjay Garage
             </Typography>
             <Typography
               sx={{
@@ -158,7 +158,7 @@ export const Footer = () => {
           textAlign: "center",
         }}
       >
-        {`© ${new Date().getFullYear()} EmJay Garage. All rights reserved.`}
+        {`© ${new Date().getFullYear()} Emjay Garage. All rights reserved.`}
       </Typography>
     </Box>
   );
