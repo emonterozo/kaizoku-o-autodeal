@@ -33,7 +33,7 @@ export default function Contact() {
     const emailTemplate = {
       from_name: formData.name,
       from_email: formData.email,
-      to_name: "EmJay Garage",
+      to_name: "Emjay Garage",
       contact_number: formData.phoneNumber,
       message: formData.message,
     };
